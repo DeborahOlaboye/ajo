@@ -1,73 +1,114 @@
-# React + TypeScript + Vite
+# Ajo PiggyBank Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, decentralized savings application built with **React**, **Vite**, **REOWN AppKit**, and **WalletConnect** on Base blockchain.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **REOWN AppKit Integration**: Seamless wallet connection with WalletConnect v2
+- **Base Network Support**: Built for Base Sepolia testnet and Base mainnet
+- **Time-Locked Savings**: Deposit ETH with enforced lock periods
+- **Modern UI/UX**: Responsive design with glass-morphism effects
+- **Real-time Updates**: Live balance and countdown timer
+- **Type-Safe**: Built with TypeScript
 
-## React Compiler
+## 📋 Prerequisites
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js (v18 or higher)
+- npm or yarn
+- A REOWN Project ID ([Get one here](https://cloud.reown.com/))
+- MetaMask or any WalletConnect-compatible wallet
 
-## Expanding the ESLint configuration
+## 🛠️ Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. **Install dependencies:**
+   \`\`\`bash
+   npm install
+   \`\`\`
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+2. **Configure environment variables:**
+   \`\`\`bash
+   cp .env.example .env
+   \`\`\`
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+3. **Edit \`.env\` file:**
+   \`\`\`env
+   VITE_REOWN_PROJECT_ID=your_reown_project_id_here
+   VITE_PIGGYBANK_ADDRESS=deployed_contract_address
+   \`\`\`
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+   **To get a REOWN Project ID:**
+   - Visit [REOWN Cloud](https://cloud.reown.com/)
+   - Create a new project
+   - Copy your Project ID
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🎯 Available Scripts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Development
+\`\`\`bash
+npm run dev
+\`\`\`
+Runs the app in development mode on [http://localhost:3000](http://localhost:3000)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Build
+\`\`\`bash
+npm run build
+\`\`\`
+Builds the app for production to the \`dist\` folder
+
+### Preview
+\`\`\`bash
+npm run preview
+\`\`\`
+Preview the production build locally
+
+### Lint
+\`\`\`bash
+npm run lint
+\`\`\`
+Check code for linting errors
+
+## 🏗️ Project Structure
+
+\`\`\`
+frontend/
+├── src/
+│   ├── components/          # React components
+│   │   ├── Header.tsx       # App header with wallet connect
+│   │   ├── PiggyBankDashboard.tsx
+│   │   ├── BalanceCard.tsx  # Balance display with countdown
+│   │   ├── DepositForm.tsx  # Deposit ETH form
+│   │   └── WithdrawButton.tsx
+│   ├── config/              # Configuration files
+│   │   ├── wagmi.ts         # REOWN AppKit & Wagmi setup
+│   │   └── contracts.ts     # Smart contract ABIs & addresses
+│   ├── hooks/               # Custom React hooks
+│   │   ├── usePiggyBank.ts  # Contract interaction hook
+│   │   └── useTimelock.ts   # Time lock countdown logic
+│   ├── App.tsx              # Main app component
+│   ├── main.tsx             # Entry point
+│   ├── App.css              # Component styles
+│   └── index.css            # Global styles
+├── package.json
+├── vite.config.ts
+├── tsconfig.json
+└── .env.example
+\`\`\`
+
+## 🔧 Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| **React 19** | UI library |
+| **Vite 7** | Build tool & dev server |
+| **TypeScript** | Type safety |
+| **REOWN AppKit** | Wallet connection & WalletConnect integration |
+| **Wagmi** | Ethereum interactions |
+| **Viem** | Lightweight Ethereum library |
+| **TanStack Query** | Async state management |
+| **Base Network** | Layer 2 blockchain |
+
+## 🌐 REOWN & WalletConnect Integration
+
+This project uses **REOWN AppKit** (formerly WalletConnect AppKit) for all wallet interactions.
+
+**Built with ❤️ using REOWN AppKit & WalletConnect on Base**
