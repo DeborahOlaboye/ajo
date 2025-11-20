@@ -1,5 +1,47 @@
 // Environment Variable Validation Utility
 
+/**
+ * Validates an Ethereum address format
+ * @param address - The address to validate
+ * @returns Object with isValid flag and error message if invalid
+ */
+function validateEthereumAddress(address: string | undefined): {
+  isValid: boolean
+  error?: string
+} {
+  if (!address) {
+    return { isValid: false }
+  }
+
+  // Check if address starts with '0x'
+  if (!address.startsWith('0x')) {
+    return {
+      isValid: false,
+      error: 'VITE_PIGGYBANK_ADDRESS must be a valid Ethereum address starting with "0x" (e.g., 0x1234...5678)'
+    }
+  }
+
+  // Check if address has correct length (42 characters including '0x')
+  if (address.length !== 42) {
+    return {
+      isValid: false,
+      error: `VITE_PIGGYBANK_ADDRESS must be exactly 42 characters long (including "0x"). Current length: ${address.length}`
+    }
+  }
+
+  // Check if remaining characters are valid hex
+  const hexPart = address.slice(2)
+  const isValidHex = /^[0-9a-fA-F]+$/.test(hexPart)
+  if (!isValidHex) {
+    return {
+      isValid: false,
+      error: 'VITE_PIGGYBANK_ADDRESS must contain only valid hexadecimal characters (0-9, a-f, A-F) after "0x"'
+    }
+  }
+
+  return { isValid: true }
+}
+
 export function validateEnvironment() {
   const errors: string[] = []
   const warnings: string[] = []
@@ -12,14 +54,15 @@ export function validateEnvironment() {
     warnings.push('VITE_REOWN_PROJECT_ID seems too short. Verify it is correct.')
   }
 
-  // Check PiggyBank Address
+  // Check PiggyBank Address with consolidated validation
   const contractAddress = import.meta.env.VITE_PIGGYBANK_ADDRESS
   if (!contractAddress) {
     warnings.push('VITE_PIGGYBANK_ADDRESS is not set. Smart contract features will not work until you deploy and configure the contract address.')
-  } else if (!contractAddress.startsWith('0x')) {
-    errors.push('VITE_PIGGYBANK_ADDRESS must start with "0x"')
-  } else if (contractAddress.length !== 42) {
-    errors.push('VITE_PIGGYBANK_ADDRESS must be 42 characters (including "0x")')
+  } else {
+    const addressValidation = validateEthereumAddress(contractAddress)
+    if (!addressValidation.isValid && addressValidation.error) {
+      errors.push(addressValidation.error)
+    }
   }
 
   // Log results
