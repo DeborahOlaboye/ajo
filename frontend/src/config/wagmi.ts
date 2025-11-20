@@ -5,8 +5,33 @@ import { QueryClient } from '@tanstack/react-query'
 import { cookieToInitialState } from 'wagmi'
 import type { AppKitNetwork } from '@reown/appkit/networks'
 
-// Get projectId from environment variables
-export const projectId = import.meta.env.VITE_REOWN_PROJECT_ID || ''
+/**
+ * Get and validate REOWN Project ID from environment variables
+ * Throws an error if projectId is not configured to prevent silent failures
+ */
+function getProjectId(): string {
+  const projectId = import.meta.env.VITE_REOWN_PROJECT_ID
+
+  if (!projectId) {
+    throw new Error(
+      'VITE_REOWN_PROJECT_ID is not configured. ' +
+      'This is required for REOWN AppKit wallet connections. ' +
+      'Get your Project ID from https://cloud.reown.com/ and add it to your .env file.'
+    )
+  }
+
+  if (typeof projectId !== 'string' || projectId.trim() === '') {
+    throw new Error(
+      'VITE_REOWN_PROJECT_ID is invalid. It must be a non-empty string. ' +
+      'Check your .env file configuration.'
+    )
+  }
+
+  return projectId
+}
+
+// Get projectId from environment variables with validation
+export const projectId = getProjectId()
 
 // Set up metadata for the dApp
 export const metadata = {
